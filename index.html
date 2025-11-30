@@ -216,6 +216,106 @@
       }, {passive:true});
     })();
     </script>
+<!-- ✨ Soft Glow Background (improved look) -->
+<div style="position:fixed; inset:0; z-index:1; pointer-events:none">
+  <canvas id="fluid" style="width:100vw; height:100vh; display:block"></canvas>
+</div>
+
+<script>
+(function () {
+  const canvas = document.getElementById('fluid');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d', { alpha: true });
+  const DPR = Math.max(1, window.devicePixelRatio || 1);
+
+  // ------ TUNE HERE ------
+  const TRAIL_FADE   = 0.03;     // lower = longer trails (0.02–0.05)
+  const OPACITY      = 0.10;     // glow strength per splat (0.06–0.14)
+  const BASE_RADIUS  = 70;       // base size (50–110)
+  const SPEED_BOOST  = 0.35;     // size grows with movement speed
+  const DISABLE_ON_MOBILE = true;
+  // Elegant palette
+  const PALETTE = [
+    [74, 222, 128],   // mint
+    [56, 189, 248],   // sky
+    [167, 139, 250],  // purple
+    [251, 146, 60],   // orange
+    [244, 114, 182]   // pink
+  ];
+  // -----------------------
+
+  let enabled = !(DISABLE_ON_MOBILE && /Mobi|Android/i.test(navigator.userAgent));
+
+  function resize() {
+    const w = Math.floor(innerWidth * DPR);
+    const h = Math.floor(innerHeight * DPR);
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w; canvas.height = h;
+    }
+  }
+  resize(); addEventListener('resize', resize);
+
+  let lastX = 0, lastY = 0, lastT = performance.now();
+
+  function pickColor(i) {
+    const c = PALETTE[i % PALETTE.length];
+    const a = OPACITY;
+    return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+  }
+
+  function splat(x, y, r, i) {
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, pickColor(i));
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Subtle continuous fade for smooth trails
+  function fade() {
+    if (!enabled) return requestAnimationFrame(fade);
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = `rgba(0,0,0,${TRAIL_FADE})`;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    requestAnimationFrame(fade);
+  }
+  fade();
+
+  let hueIndex = 0;
+
+  function handlePointer(x, y) {
+    if (!enabled) return;
+    const now = performance.now();
+    const dt = Math.max(1, now - lastT);
+    const dx = x - lastX, dy = y - lastY;
+    const speed = Math.sqrt(dx*dx + dy*dy) / dt; // px/ms
+    const radius = (BASE_RADIUS + speed * 900 * SPEED_BOOST) * DPR;
+
+    splat(x, y, radius, hueIndex++);
+    lastX = x; lastY = y; lastT = now;
+  }
+
+  const move = (clientX, clientY) => {
+    const x = clientX * DPR, y = clientY * DPR;
+    if (!lastX && !lastY) { lastX = x; lastY = y; }
+    handlePointer(x, y);
+  };
+
+  addEventListener('mousemove', (e) => move(e.clientX, e.clientY));
+  addEventListener('touchmove', (e) => {
+    if (!enabled) return;
+    for (const t of e.touches) move(t.clientX, t.clientY);
+  }, { passive: true });
+
+  // Optional: toggle with keyboard (press "G")
+  addEventListener('keydown', (e) => {
+    if (e.key.toLowerCase() === 'g') enabled = !enabled;
+  });
+})();
+</script>
 
   </body>
 </html>
