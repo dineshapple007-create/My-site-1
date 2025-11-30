@@ -97,9 +97,69 @@
         <li>🌐 <b>Portfolio Website</b> — (This website!)</li>
       </ul>
     </section>
+<!-- 🖊️ Pen Cursor Effect -->
+<div style="position:fixed; inset:0; z-index:1; pointer-events:none;">
+  <canvas id="penCanvas" style="width:100vw; height:100vh; display:block;"></canvas>
+</div>
+
+<script>
+(function () {
+  const canvas = document.getElementById('penCanvas');
+  const ctx = canvas.getContext('2d');
+  const DPR = window.devicePixelRatio || 1;
+  canvas.width = innerWidth * DPR;
+  canvas.height = innerHeight * DPR;
+  ctx.scale(DPR, DPR);
+
+  let lastX = 0, lastY = 0;
+  let hue = 200; // start color (blue tone)
+
+  function resize() {
+    canvas.width = innerWidth * DPR;
+    canvas.height = innerHeight * DPR;
+    ctx.scale(DPR, DPR);
+  }
+  addEventListener('resize', resize);
+
+  // Draw smooth pen stroke
+  function drawLine(x, y) {
+    ctx.strokeStyle = `hsl(${hue}, 100%, 70%)`;
+    ctx.lineWidth = 3;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    lastX = x;
+    lastY = y;
+    hue = (hue + 1) % 360;
+  }
+
+  // Slight fade over time (creates smooth trail)
+  function fade() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    requestAnimationFrame(fade);
+  }
+  fade();
+
+  addEventListener("mousemove", e => {
+    if (!lastX && !lastY) {
+      lastX = e.clientX;
+      lastY = e.clientY;
+    }
+    drawLine(e.clientX, e.clientY);
+  });
+
+  addEventListener("touchmove", e => {
+    for (let t of e.touches) drawLine(t.clientX, t.clientY);
+  }, { passive: true });
+})();
+</script>
 
   </body>
 </html>
+
 
 
 
