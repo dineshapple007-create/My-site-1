@@ -96,9 +96,64 @@
         <li>🎥 <b>Short Video Edits</b> — Promo edits & cinematic cuts</li>
         <li>🌐 <b>Portfolio Website</b> — (This website!)</li>
       </ul>
+<!-- Splash cursor (plain HTML, no libs) -->
+<div style="position:fixed; inset:0; pointer-events:none; z-index:1">
+  <canvas id="splash" style="width:100vw; height:100vh; display:block"></canvas>
+</div>
+
+<script>
+(function () {
+  const c = document.getElementById('splash');
+  const ctx = c.getContext('2d', {alpha:true});
+  const DPR = Math.max(1, devicePixelRatio||1);
+
+  function fit(){
+    const w = Math.floor(innerWidth*DPR), h = Math.floor(innerHeight*DPR);
+    if (c.width!==w || c.height!==h){ c.width=w; c.height=h; }
+  }
+  fit(); addEventListener('resize', fit);
+
+  // Pastel palette (mint, sky, purple, orange, pink)
+  const P = [[74,222,128],[56,189,248],[167,139,250],[251,146,60],[244,114,182]];
+  let i = 0;
+
+  function splat(x,y,r){
+    const g = ctx.createRadialGradient(x,y,0,x,y,r);
+    const [R,G,B] = P[i++ % P.length];
+    g.addColorStop(0, `rgba(${R},${G},${B},0.12)`);
+    g.addColorStop(1, `rgba(0,0,0,0)`);
+    ctx.globalCompositeOperation='lighter';
+    ctx.fillStyle=g;
+    ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+  }
+
+  function fade(){
+    // transparent fade — won’t darken your page
+    ctx.globalCompositeOperation='destination-out';
+    ctx.fillStyle='rgba(0,0,0,0.03)';   // increase to 0.05 for shorter trails
+    ctx.fillRect(0,0,c.width,c.height);
+    requestAnimationFrame(fade);
+  }
+  fade();
+
+  let lastX=0,lastY=0,lastT=performance.now();
+  function move(px,py){
+    const x = px*DPR, y = py*DPR;
+    const now = performance.now(), dt = Math.max(1, now-lastT);
+    const speed = Math.hypot(x-lastX,y-lastY)/dt; // px/ms
+    const R = (60 + speed*900*0.35) * DPR;        // radius grows with speed
+    splat(x,y,R);
+    lastX=x; lastY=y; lastT=now;
+  }
+
+  addEventListener('mousemove', e=>move(e.clientX,e.clientY));
+  addEventListener('touchmove', e=>{ for(const t of e.touches) move(t.clientX,t.clientY); }, {passive:true});
+})();
+</script>
 
   </body>
 </html>
+
 
 
 
