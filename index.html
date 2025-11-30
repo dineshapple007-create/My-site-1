@@ -99,7 +99,7 @@
     </section>
 <!-- 🖊️ Pen Cursor Effect -->
 <div style="position:fixed; inset:0; z-index:1; pointer-events:none;">
-  <canvas id="penCanvas" style="width:100vw; height:100vh; display:block;"></canvas>
+  <canvas id="penCanvas" style="width:500vw; height:500vh; display:block;"></canvas>
 </div>
 
 <script>
@@ -112,7 +112,7 @@
   ctx.scale(DPR, DPR);
 
   let lastX = 0, lastY = 0;
-  let hue = 200; // start color (blue tone)
+  let hue = 300; // start color (blue tone)
 
   function resize() {
     canvas.width = innerWidth * DPR;
@@ -159,6 +159,7 @@
 
   </body>
 </html>
+
 
 
 
