@@ -1,48 +1,103 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Welcome to My Website</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dinesh Kumar | Portfolio</title>
     <style>
       body {
         margin: 0;
-        font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #1e90ff, #00bfff);
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
         color: white;
-        text-align: center;
-        min-height: 100vh;
         display: flex;
         flex-direction: column;
-        justify-content: center;
         align-items: center;
+        min-height: 100vh;
       }
-      h1 {
+      header {
+        text-align: center;
+        padding: 60px 20px 20px;
+      }
+      header h1 {
         font-size: 48px;
-        margin-bottom: 10px;
+        margin: 0;
       }
-      p {
-        font-size: 20px;
-        margin-bottom: 30px;
-      }
-      button {
-        background: white;
-        color: #1e90ff;
-        border: none;
-        padding: 15px 25px;
-        border-radius: 10px;
+      header p {
         font-size: 18px;
+        color: #aadcee;
+      }
+      .btn {
+        background: #00bcd4;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 30px;
+        font-size: 16px;
         cursor: pointer;
+        margin-top: 20px;
         transition: 0.3s;
       }
-      button:hover {
-        background: #1e90ff;
+      .btn:hover {
+        background: white;
+        color: #00bcd4;
+      }
+      section {
+        width: 90%;
+        max-width: 700px;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px 30px;
+        border-radius: 16px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        margin-bottom: 40px;
+      }
+      section h2 {
+        border-bottom: 2px solid #00bcd4;
+        padding-bottom: 5px;
+      }
+      footer {
+        padding: 20px;
+        text-align: center;
+        font-size: 14px;
+        opacity: 0.8;
+      }
+      .social a {
         color: white;
-        border: 2px solid white;
+        text-decoration: none;
+        margin: 0 10px;
+        font-size: 20px;
+        transition: 0.3s;
+      }
+      .social a:hover {
+        color: #00bcd4;
       }
     </style>
   </head>
   <body>
-    <h1>🌍 Hello, World!</h1>
-    <p>This is my first cool website using GitHub and Vercel!</p>
-    <button onclick="alert('Thank you for visiting! 😊')">Click Me</button>
-  </body>
-</html>
+    <header>
+      <h1>Dinesh Kumar</h1>
+      <p>Graphic Designer | Video Editor | Beginner Web Developer</p>
+      <button class="btn" onclick="window.scrollTo(0, document.body.scrollHeight)">View My Work</button>
+    </header>
+
+    <section>
+      <h2>About Me</h2>
+      <p>
+        Hi! I'm Dinesh — a creative designer passionate about animation, visuals,
+        and storytelling. I’m currently exploring web design and developing my
+        first online projects.
+      </p>
+    </section>
+
+    <section>
+      <h2>Projects</h2>
+      <ul>
+        <li>🎨 <b>Poster Design Practice</b> — Daily creative design challenges</li>
+        <li>🎥 <b>Short Video Edits</b> — Promo edits & cinematic cuts</li>
+        <li>🌐 <b>Portfolio Website</b> — (This website!)</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+
