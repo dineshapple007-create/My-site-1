@@ -100,4 +100,124 @@
 
     <section>
       <h2>Contact</h2>
+    <!-- Fluid background animation -->
+    <div style="position:fixed; inset:0; z-index:1; pointer-events:none">
+      <canvas id="fluid" style="width:100vw; height:100vh; display:block"></canvas>
+    </div>
+
+    <script>
+    (function () {
+      const canvas = document.getElementById('fluid');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const DPR = Math.max(1, window.devicePixelRatio || 1);
+
+      function resize() {
+        const w = Math.floor(innerWidth * DPR);
+        const h = Math.floor(innerHeight * DPR);
+        if (canvas.width !== w || canvas.height !== h) {
+          canvas.width = w; canvas.height = h;
+        }
+      }
+      resize();
+      addEventListener('resize', resize);
+
+      function hsv(h, s, v){
+        let f = (n,k=(n+h*6)%6)=>v - v*s*Math.max(Math.min(k,4-k,1),0);
+        return `rgba(${(f(5)*255)|0},${(f(3)*255)|0},${(f(1)*255)|0},0.12)`;
+      }
+      let hue = 0;
+
+      function splat(x, y, r=80*DPR){
+        const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+        hue = (hue + 0.015) % 1;
+        g.addColorStop(0, hsv(hue,1,1));
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI*2);
+        ctx.fill();
+      }
+
+      function fade(){
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.fillStyle = 'rgba(0,0,0,0.04)';
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.globalCompositeOperation = 'lighter';
+        requestAnimationFrame(fade);
+      }
+      fade();
+
+      addEventListener('mousemove', (e)=>{
+        splat(e.clientX * DPR, e.clientY * DPR);
+      });
+
+      addEventListener('touchmove', (e)=>{
+        for (const t of e.touches) splat(t.clientX * DPR, t.clientY * DPR, 100*DPR);
+      }, {passive:true});
+    })();
+    </script>
+          <!-- Fluid background animation -->
+    <div style="position:fixed; inset:0; z-index:1; pointer-events:none">
+      <canvas id="fluid" style="width:100vw; height:100vh; display:block"></canvas>
+    </div>
+
+    <script>
+    (function () {
+      const canvas = document.getElementById('fluid');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const DPR = Math.max(1, window.devicePixelRatio || 1);
+
+      function resize() {
+        const w = Math.floor(innerWidth * DPR);
+        const h = Math.floor(innerHeight * DPR);
+        if (canvas.width !== w || canvas.height !== h) {
+          canvas.width = w; canvas.height = h;
+        }
+      }
+      resize();
+      addEventListener('resize', resize);
+
+      function hsv(h, s, v){
+        let f = (n,k=(n+h*6)%6)=>v - v*s*Math.max(Math.min(k,4-k,1),0);
+        return `rgba(${(f(5)*255)|0},${(f(3)*255)|0},${(f(1)*255)|0},0.12)`;
+      }
+      let hue = 0;
+
+      function splat(x, y, r=80*DPR){
+        const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+        hue = (hue + 0.015) % 1;
+        g.addColorStop(0, hsv(hue,1,1));
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI*2);
+        ctx.fill();
+      }
+
+      function fade(){
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.fillStyle = 'rgba(0,0,0,0.04)';
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.globalCompositeOperation = 'lighter';
+        requestAnimationFrame(fade);
+      }
+      fade();
+
+      addEventListener('mousemove', (e)=>{
+        splat(e.clientX * DPR, e.clientY * DPR);
+      });
+
+      addEventListener('touchmove', (e)=>{
+        for (const t of e.touches) splat(t.clientX * DPR, t.clientY * DPR, 100*DPR);
+      }, {passive:true});
+    })();
+    </script>
+
+  </body>
+</html>
+
 
